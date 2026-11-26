@@ -1,0 +1,16 @@
+{
+  "id": "bambu-classic",
+  "name": "Bambu Classic Emerald",
+  "author": "NALA-OS Design Factory",
+  "accent": "#00AE42",
+  "accent_pressed": "#008E36",
+  "accent_hovered": "#1CC65B",
+  "bg_primary": "#121517",
+  "bg_surface": "#1B2023",
+  "bg_elevated": "#242A2E",
+  "text_primary": "#F2F5F7",
+  "text_muted": "#9DA8B0",
+  "border": "#30383E",
+  "warning": "#F59E0B",
+  "danger": "#EF4444"
+}

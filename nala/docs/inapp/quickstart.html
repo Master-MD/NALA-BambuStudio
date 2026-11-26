@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NALA-BambuStudio — 5-Sprachen Offline Quickstart (DE / FR / IT / RM / EN)</title>
+<style>
+  :root { --bg:#080A0F; --surf:#11151E; --brd:rgba(255,255,255,0.1); --txt:#EEF2F7; --mut:#8E99AD; --acc:#10B981; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--txt); font-family:-apple-system,BlinkMacSystemFont,"Inter",system-ui,sans-serif; padding:28px; max-width:960px; margin:0 auto; line-height:1.55; }
+  header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-bottom:1px solid var(--brd); padding-bottom:16px; margin-bottom:22px; }
+  h1 { font-size:22px; }
+  .langs button { background:var(--surf); color:var(--mut); border:1px solid var(--brd); padding:6px 12px; border-radius:8px; cursor:pointer; font-weight:700; margin-left:4px; }
+  .langs button.active { background:var(--acc); color:#05070A; border-color:var(--acc); }
+  .card { background:var(--surf); border:1px solid var(--brd); border-radius:12px; padding:18px 20px; margin-bottom:14px; }
+  .card h2 { font-size:15px; color:var(--acc); margin-bottom:8px; }
+  .card ul { padding-left:18px; color:var(--txt); font-size:13.5px; }
+  .card li { margin-bottom:5px; }
+  code { font-family:ui-monospace,monospace; background:#05070B; padding:2px 6px; border-radius:5px; font-size:12px; color:#34D399; }
+  .foot { margin-top:20px; font-size:12px; color:var(--mut); }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="t">NALA-BambuStudio — Offline Quickstart</h1>
+  <div class="langs">
+    <button class="active" data-l="de">DE</button>
+    <button data-l="fr">FR</button>
+    <button data-l="it">IT</button>
+    <button data-l="rm">RM</button>
+    <button data-l="en">EN</button>
+  </div>
+</header>
+<div id="content"></div>
+<div class="foot">100% Offline · 0% Tracking · AGPLv3 · PDF-Handbücher unter <code>nala/docs/pdf/</code></div>
+<script>
+const D = {
+  de: [
+    ["1. Ubuntu Intel-GPU & Startup Turbo (BS-02)", ["Starte unter Ubuntu via <code>nala/scripts/nala-bambu-studio-ubuntu.sh</code>.", "Setzt automatisch <code>WEBKIT_DISABLE_DMABUF_RENDERER=1</code>, Intel-MSAA-Cap X4, 4096px Textur-Limit & <code>mimalloc</code>."]],
+    ["2. 5 sHeriFF Skins (BS-03)", ["Wähle deinen Skin per <code>NALA_SKIN=nala-obsidian</code>, <code>porsche-v4</code>, <code>doom-uac</code>, <code>matrix-construct</code> oder <code>bambu-classic</code>.", "Alle Skins sind per FIPS-180-4 SHA-256 versiegelt (<code>nala/skins/skins_manifest.json</code>)."]],
+    ["3. sHeriFF Dual-Mode Privacy (BS-04)", ["<code>NALA_NETWORK_MODE=compat</code> (Standard): 100% Kompatibilität für alle Bambu-Drucker (A1/P1/X1/H2D/H3C/AMS).", "<code>NALA_NETWORK_MODE=lan_only</code>: 0% Cloud-OSS, 0% Telemetrie, kein Closed-Source-Blob."]],
+    ["4. NALA Filamentrix Rust Bridge (BS-06)", ["Starte <code>nala-bambu-bridge-rs --serve</code> (127.0.0.1:18766) für AGPLv3-saubere Kopplung mit NALA Filamentrix (:18765)."]]
+  ],
+  fr: [
+    ["1. Turbo GPU Intel Ubuntu (BS-02)", ["Lancez sous Ubuntu via <code>nala/scripts/nala-bambu-studio-ubuntu.sh</code>.", "Active automatiquement <code>WEBKIT_DISABLE_DMABUF_RENDERER=1</code> et le plafond MSAA X4 / 4096px."]],
+    ["2. 5 Skins sHeriFF (BS-03)", ["Choisissez via <code>NALA_SKIN=nala-obsidian</code>, <code>porsche-v4</code>, <code>doom-uac</code>, <code>matrix-construct</code> ou <code>bambu-classic</code>."]],
+    ["3. Garde Dual-Mode sHeriFF (BS-04)", ["<code>compat</code>: 100% imprimantes Bambu + Cloud. <code>lan_only</code>: 100% LAN local sans télémétrie."]],
+    ["4. Pont Rust NALA Filamentrix (BS-06)", ["Exécutez <code>nala-bambu-bridge-rs --serve</code> (127.0.0.1:18766) vers Filamentrix (:18765)."]]
+  ],
+  it: [
+    ["1. Turbo GPU Intel Ubuntu (BS-02)", ["Avvia su Ubuntu con <code>nala/scripts/nala-bambu-studio-ubuntu.sh</code>.", "Imposta <code>WEBKIT_DISABLE_DMABUF_RENDERER=1</code> e limite MSAA X4 / 4096px."]],
+    ["2. 5 Skin sHeriFF (BS-03)", ["Seleziona con <code>NALA_SKIN=nala-obsidian</code>, <code>porsche-v4</code>, <code>doom-uac</code>, <code>matrix-construct</code> o <code>bambu-classic</code>."]],
+    ["3. Privacy Dual-Mode sHeriFF (BS-04)", ["<code>compat</code>: 100% stampanti Bambu + Cloud. <code>lan_only</code>: 100% LAN locale senza telemetria."]],
+    ["4. Ponte Rust NALA Filamentrix (BS-06)", ["Avvia <code>nala-bambu-bridge-rs --serve</code> (127.0.0.1:18766) verso Filamentrix (:18765)."]]
+  ],
+  rm: [
+    ["1. Turbo GPU Intel Ubuntu (BS-02)", ["Aviar sut Ubuntu cun <code>nala/scripts/nala-bambu-studio-ubuntu.sh</code>.", "Activescha <code>WEBKIT_DISABLE_DMABUF_RENDERER=1</code> e limitescha MSAA sin X4 / 4096px."]],
+    ["2. 5 Skins sHeriFF (BS-03)", ["Tscherner via <code>NALA_SKIN=nala-obsidian</code>, <code>porsche-v4</code>, <code>doom-uac</code>, <code>matrix-construct</code> u <code>bambu-classic</code>."]],
+    ["3. Protecziun Dual-Mode sHeriFF (BS-04)", ["<code>compat</code>: 100% stampaders Bambu + Cloud. <code>lan_only</code>: 100% LAN local senza telemetria."]],
+    ["4. Punt Rust NALA Filamentrix (BS-06)", ["Aviar <code>nala-bambu-bridge-rs --serve</code> (127.0.0.1:18766) vers Filamentrix (:18765)."]]
+  ],
+  en: [
+    ["1. Ubuntu Intel-GPU & Startup Turbo (BS-02)", ["Launch on Ubuntu via <code>nala/scripts/nala-bambu-studio-ubuntu.sh</code>.", "Automatically enables <code>WEBKIT_DISABLE_DMABUF_RENDERER=1</code>, Intel MSAA X4 & 4096px cap."]],
+    ["2. 5 sHeriFF Skins (BS-03)", ["Select via <code>NALA_SKIN=nala-obsidian</code>, <code>porsche-v4</code>, <code>doom-uac</code>, <code>matrix-construct</code>, or <code>bambu-classic</code>."]],
+    ["3. sHeriFF Dual-Mode Privacy (BS-04)", ["<code>compat</code> (default): 100% Bambu printer & Cloud parity. <code>lan_only</code>: zero telemetry, zero OSS upload."]],
+    ["4. NALA Filamentrix Rust Bridge (BS-06)", ["Run <code>nala-bambu-bridge-rs --serve</code> (127.0.0.1:18766) for AGPLv3-clean IPC with Filamentrix (:18765)."]]
+  ]
+};
+function render(l) {
+  document.getElementById("content").innerHTML = D[l].map(([h, items]) =>
+    `<div class="card"><h2>${h}</h2><ul>${items.map(i => `<li>${i}</li>`).join("")}</ul></div>`
+  ).join("");
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-l]");
+  if (!b) return;
+  document.querySelectorAll("[data-l]").forEach(x => x.classList.toggle("active", x === b));
+  render(b.dataset.l);
+});
+render("de");
+</script>
+</body>
+</html>

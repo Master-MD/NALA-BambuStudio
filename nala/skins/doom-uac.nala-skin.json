@@ -1,0 +1,16 @@
+{
+  "id": "doom-uac",
+  "name": "DOOM UAC Praetor HUD",
+  "author": "NALA-OS Design Factory",
+  "accent": "#EA580C",
+  "accent_pressed": "#C2410C",
+  "accent_hovered": "#F97316",
+  "bg_primary": "#0C0A09",
+  "bg_surface": "#181311",
+  "bg_elevated": "#231B18",
+  "text_primary": "#FAFAF9",
+  "text_muted": "#A8A29E",
+  "border": "#3B271D",
+  "warning": "#FACC15",
+  "danger": "#DC2626"
+}

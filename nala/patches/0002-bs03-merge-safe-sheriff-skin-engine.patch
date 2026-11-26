@@ -1,0 +1,167 @@
+diff --git a/src/slic3r/GUI/Widgets/StateColor.cpp b/src/slic3r/GUI/Widgets/StateColor.cpp
+index cdfabca..b3fd0e1 100644
+--- a/src/slic3r/GUI/Widgets/StateColor.cpp
++++ b/src/slic3r/GUI/Widgets/StateColor.cpp
+@@ -1,7 +1,28 @@
+ #include "StateColor.hpp"
+ #include <wx/gdicmn.h>
++#include <cstdlib>
++#include <fstream>
++#include <string>
+ 
+ static bool gDarkMode = false;
++static std::string gAppliedNalaSkin;
++
++static std::string nala_resolve_active_skin()
++{
++    if (const char* env_skin = std::getenv("NALA_SKIN"); env_skin && *env_skin)
++        return std::string(env_skin);
++    if (const char* home = std::getenv("HOME"); home && *home) {
++        std::ifstream ifs(std::string(home) + "/.config/NALA-BambuStudio/active_skin");
++        std::string line;
++        if (ifs && std::getline(ifs, line)) {
++            while (!line.empty() && (line.back() == '\r' || line.back() == '\n' || line.back() == ' '))
++                line.pop_back();
++            if (!line.empty())
++                return line;
++        }
++    }
++    return "nala-obsidian";
++}
+ 
+ static bool operator<(wxColour const &l, wxColour const &r) { return l.GetRGBA() < r.GetRGBA(); }
+ 
+@@ -58,12 +79,77 @@ std::map<wxColour, wxColour> const & StateColor::GetDarkMap()
+     return gDarkColors;
+ }
+ 
+-void StateColor::SetDarkMode(bool dark) { gDarkMode = dark; }
++static void nala_apply_skin_palette()
++{
++    const std::string skin = nala_resolve_active_skin();
++    if (skin == gAppliedNalaSkin)
++        return;
++    gAppliedNalaSkin = skin;
++
++    if (skin == "bambu-classic") {
++        gDarkColors[ThemeColor::BrandGreen]        = wxColour("#21A452");
++        gDarkColors[ThemeColor::BrandGreenPressed] = wxColour("#1C8A46");
++        gDarkColors[ThemeColor::BrandGreenHovered] = wxColour("#37B865");
++        gDarkColors[ThemeColor::White]             = wxColour("#2D2D31");
++        gDarkColors[ThemeColor::Grey200]           = wxColour("#36363C");
++        gDarkColors[ThemeColor::Grey250]           = wxColour("#36363B");
++        return;
++    }
++
++    if (skin == "porsche-v4") {
++        gDarkColors[ThemeColor::BrandGreen]        = wxColour("#D5001C");
++        gDarkColors[ThemeColor::BrandGreenPressed] = wxColour("#A80016");
++        gDarkColors[ThemeColor::BrandGreenHovered] = wxColour("#F21B37");
++        gDarkColors[ThemeColor::White]             = wxColour("#17181E");
++        gDarkColors[ThemeColor::Grey200]           = wxColour("#20222A");
++        gDarkColors[ThemeColor::Grey250]           = wxColour("#0E0E12");
++        gDarkColors[ThemeColor::LightGreen]        = wxColour("#2A1519");
++        return;
++    }
++
++    if (skin == "doom-uac") {
++        gDarkColors[ThemeColor::BrandGreen]        = wxColour("#EA580C");
++        gDarkColors[ThemeColor::BrandGreenPressed] = wxColour("#C2410C");
++        gDarkColors[ThemeColor::BrandGreenHovered] = wxColour("#F97316");
++        gDarkColors[ThemeColor::White]             = wxColour("#181311");
++        gDarkColors[ThemeColor::Grey200]           = wxColour("#231B18");
++        gDarkColors[ThemeColor::Grey250]           = wxColour("#0C0A09");
++        gDarkColors[ThemeColor::LightGreen]        = wxColour("#2B1910");
++        return;
++    }
++
++    if (skin == "matrix-construct") {
++        gDarkColors[ThemeColor::BrandGreen]        = wxColour("#10B981");
++        gDarkColors[ThemeColor::BrandGreenPressed] = wxColour("#047857");
++        gDarkColors[ThemeColor::BrandGreenHovered] = wxColour("#34D399");
++        gDarkColors[ThemeColor::White]             = wxColour("#07130E");
++        gDarkColors[ThemeColor::Grey200]           = wxColour("#0B1D15");
++        gDarkColors[ThemeColor::Grey250]           = wxColour("#030806");
++        gDarkColors[ThemeColor::LightGreen]        = wxColour("#0A261A");
++        return;
++    }
++
++    // Default: nala-obsidian
++    gDarkColors[ThemeColor::BrandGreen]        = wxColour("#10B981");
++    gDarkColors[ThemeColor::BrandGreenPressed] = wxColour("#059669");
++    gDarkColors[ThemeColor::BrandGreenHovered] = wxColour("#34D399");
++    gDarkColors[ThemeColor::White]             = wxColour("#11151E");
++    gDarkColors[ThemeColor::Grey200]           = wxColour("#171C28");
++    gDarkColors[ThemeColor::Grey250]           = wxColour("#080A0F");
++    gDarkColors[ThemeColor::LightGreen]        = wxColour("#0F241D");
++}
++
++void StateColor::SetDarkMode(bool dark) {
++    gDarkMode = dark;
++    nala_apply_skin_palette();
++}
+ 
+ inline wxColour darkModeColorFor2(wxColour const &color)
+ {
+     if (!gDarkMode)
+         return color;
++    if (gAppliedNalaSkin.empty())
++        nala_apply_skin_palette();
+     auto iter = gDarkColors.find(color);
+     if (iter != gDarkColors.end()) return iter->second;
+     return color;
+diff --git a/src/slic3r/GUI/Widgets/WebView.cpp b/src/slic3r/GUI/Widgets/WebView.cpp
+index 524f77f..904063a 100644
+--- a/src/slic3r/GUI/Widgets/WebView.cpp
++++ b/src/slic3r/GUI/Widgets/WebView.cpp
+@@ -7,6 +7,7 @@
+ #include "slic3r/Utils/MacDarkMode.hpp"
+ 
+ #include <chrono>
++#include <cstdlib>
+ #include <deque>
+ #include <memory>
+ 
+@@ -1234,6 +1235,32 @@ static void apply_devtools(wxWebView *webView, bool enable)
+ #endif
+ }
+ 
++static const char* nala_webview_skin_user_script()
++{
++    const char* raw_skin = std::getenv("NALA_SKIN");
++    const std::string skin = (raw_skin && *raw_skin) ? std::string(raw_skin) : std::string("nala-obsidian");
++    if (skin == "bambu-classic")
++        return nullptr;
++    if (skin == "porsche-v4") {
++        return "(function(){var s=document.getElementById('nala-skin-tokens')||document.createElement('style');"
++               "s.id='nala-skin-tokens';s.textContent=':root{--nala-accent:#D5001C;--brand-green:#D5001C;--primary-color:#D5001C;--nala-bg:#0E0E12;--nala-surface:#17181E;}';"
++               "(document.head||document.documentElement).appendChild(s);})();";
++    }
++    if (skin == "doom-uac") {
++        return "(function(){var s=document.getElementById('nala-skin-tokens')||document.createElement('style');"
++               "s.id='nala-skin-tokens';s.textContent=':root{--nala-accent:#EA580C;--brand-green:#EA580C;--primary-color:#EA580C;--nala-bg:#0C0A09;--nala-surface:#181311;}';"
++               "(document.head||document.documentElement).appendChild(s);})();";
++    }
++    if (skin == "matrix-construct") {
++        return "(function(){var s=document.getElementById('nala-skin-tokens')||document.createElement('style');"
++               "s.id='nala-skin-tokens';s.textContent=':root{--nala-accent:#10B981;--brand-green:#10B981;--primary-color:#10B981;--nala-bg:#030806;--nala-surface:#07130E;}';"
++               "(document.head||document.documentElement).appendChild(s);})();";
++    }
++    return "(function(){var s=document.getElementById('nala-skin-tokens')||document.createElement('style');"
++           "s.id='nala-skin-tokens';s.textContent=':root{--nala-accent:#10B981;--brand-green:#10B981;--primary-color:#10B981;--nala-bg:#080A0F;--nala-surface:#11151E;}';"
++           "(document.head||document.documentElement).appendChild(s);})();";
++}
++
+ wxWebView *WebView::CreateWebView(wxWindow *parent, wxString const &url, wxString const &name,
+                                  Slic3r::GUI::WebViewProtectionMode mode)
+ {
+@@ -1353,6 +1380,9 @@ wxWebView *WebView::CreateWebView(wxWindow *parent, wxString const &url, wxStrin
+     if (!name.empty())
+         webView->SetName(name);
+     if (has_backend_attempt) {
++        if (const char* nala_skin_js = nala_webview_skin_user_script()) {
++            webView->AddUserScript(wxString::FromUTF8(nala_skin_js), wxWEBVIEW_INJECT_AT_DOCUMENT_START);
++        }
+         auto addScriptMessageHandler = [] (wxWebView *webView) {
+             Slic3r::GUI::wxGetApp().set_adding_script_handler(true);
+ 

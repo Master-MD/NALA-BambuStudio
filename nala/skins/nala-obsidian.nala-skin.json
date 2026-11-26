@@ -1,0 +1,16 @@
+{
+  "id": "nala-obsidian",
+  "name": "NALA Obsidian Dark",
+  "author": "NALA-OS Design Factory",
+  "accent": "#10B981",
+  "accent_pressed": "#059669",
+  "accent_hovered": "#34D399",
+  "bg_primary": "#080A0F",
+  "bg_surface": "#11151E",
+  "bg_elevated": "#171C28",
+  "text_primary": "#EEF2F7",
+  "text_muted": "#8E99AD",
+  "border": "#232A38",
+  "warning": "#F59E0B",
+  "danger": "#EF4444"
+}

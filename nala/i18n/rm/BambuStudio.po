@@ -1,0 +1,212 @@
+# NALA-BambuStudio Rumantsch Grischun (rm_CH) Translation Catalog
+# Copyright (C) 2026 Master-MD / NALA-OS (AGPLv3)
+msgid ""
+msgstr ""
+"Project-Id-Version: NALA-BambuStudio 02.09.02.62\n"
+"POT-Creation-Date: 2026-11-26 22:00+0100\n"
+"PO-Revision-Date: 2026-11-26 22:00+0100\n"
+"Last-Translator: NALA-OS Localization Engine\n"
+"Language-Team: Rumantsch Grischun <rm_CH>\n"
+"Language: rm\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Prepare"
+msgstr "Preparar"
+
+msgid "Preview"
+msgstr "Prevista"
+
+msgid "Device"
+msgstr "Apparat"
+
+msgid "Project"
+msgstr "Project"
+
+msgid "Calibration"
+msgstr "Calibraziun"
+
+msgid "Home"
+msgstr "Avertura"
+
+msgid "Slice plate"
+msgstr "Tagliar la platta"
+
+msgid "Slice all"
+msgstr "Tagliar tut"
+
+msgid "Print plate"
+msgstr "Stampar la platta"
+
+msgid "Send"
+msgstr "Trametter"
+
+msgid "Export G-code file"
+msgstr "Exportar datoteca G-code"
+
+msgid "Export plate sliced file"
+msgstr "Exportar platta tagliada"
+
+msgid "File"
+msgstr "Datoteca"
+
+msgid "Edit"
+msgstr "Modifitgar"
+
+msgid "View"
+msgstr "Vista"
+
+msgid "Help"
+msgstr "Agid"
+
+msgid "Preferences"
+msgstr "Preferenzas"
+
+msgid "Printer"
+msgstr "Stampader"
+
+msgid "Filament"
+msgstr "Filament"
+
+msgid "Process"
+msgstr "Process"
+
+msgid "Quality"
+msgstr "Qualitad"
+
+msgid "Strength"
+msgstr "Resistenza"
+
+msgid "Speed"
+msgstr "Sveltezza"
+
+msgid "Support"
+msgstr "Sustegn"
+
+msgid "Others"
+msgstr "Auters"
+
+msgid "Layer height"
+msgstr "Autezza da la stresa"
+
+msgid "Initial layer height"
+msgstr "Autezza da l'emprima stresa"
+
+msgid "Wall loops"
+msgstr "Rets da paraid"
+
+msgid "Sparse infill density"
+msgstr "Densitad da l'emplenida"
+
+msgid "Sparse infill pattern"
+msgstr "Muster da l'emplenida"
+
+msgid "Enable support"
+msgstr "Activar sustegn"
+
+msgid "Auto arrange"
+msgstr "Ordinar automaticamain"
+
+msgid "Auto orient"
+msgstr "Orientar automaticamain"
+
+msgid "Move"
+msgstr "Spustar"
+
+msgid "Rotate"
+msgstr "Rotar"
+
+msgid "Scale"
+msgstr "Scalar"
+
+msgid "Mirror"
+msgstr "Spieglar"
+
+msgid "Color Painting"
+msgstr "Coluraziun"
+
+msgid "Save Project"
+msgstr "Memorisar il project"
+
+msgid "Open Project"
+msgstr "Avrir in project"
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "Export"
+msgstr "Exportar"
+
+msgid "Undo"
+msgstr "Revocar"
+
+msgid "Redo"
+msgstr "Restabilir"
+
+msgid "Delete"
+msgstr "Stizzar"
+
+msgid "Cancel"
+msgstr "Interrumper"
+
+msgid "Confirm"
+msgstr "Confermar"
+
+msgid "Close"
+msgstr "Serrar"
+
+msgid "Apply"
+msgstr "Applitgar"
+
+msgid "Reset"
+msgstr "Redefinir"
+
+msgid "Language"
+msgstr "Lingua"
+
+msgid "Dark mode"
+msgstr "Modus stgir"
+
+msgid "Estimated printing time"
+msgstr "Temp da stampa stimà"
+
+msgid "Total filament"
+msgstr "Filament total"
+
+msgid "Plate"
+msgstr "Platta"
+
+msgid "Nozzle"
+msgstr "Bochetta"
+
+msgid "Bed temperature"
+msgstr "Temperatura dal letg"
+
+msgid "Nozzle temperature"
+msgstr "Temperatura da la bochetta"
+
+msgid "AMS"
+msgstr "AMS"
+
+msgid "Sync"
+msgstr "Sincronisar"
+
+msgid "Online"
+msgstr "Online"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "Printing"
+msgstr "Stampond"
+
+msgid "Idle"
+msgstr "Pront"
+
+msgid "Pause"
+msgstr "Pausa"
+
+msgid "Stop"
+msgstr "Stop"

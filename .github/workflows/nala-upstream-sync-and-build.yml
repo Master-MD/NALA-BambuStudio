@@ -1,0 +1,159 @@
+name: NALA Upstream Auto-Sync, Gates & Multi-OS Build
+
+on:
+  schedule:
+    # Daily upstream check against bambulab/BambuStudio at 03:17 UTC
+    - cron: '17 3 * * *'
+  push:
+    branches:
+      - master
+      - nala-optimized
+    paths:
+      - 'nala/**'
+      - 'resources/i18n/rm/**'
+      - 'version.inc'
+      - '.github/workflows/nala-upstream-sync-and-build.yml'
+  workflow_dispatch:
+    inputs:
+      sync_upstream:
+        description: 'Fetch & sync latest bambulab/BambuStudio into master and rebuild nala-optimized'
+        type: boolean
+        default: true
+      trigger_full_slicer_build:
+        description: 'Trigger full Multi-OS C++ Slicer build (Ubuntu, macOS ARM64/Intel, Windows)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: nala-upstream-sync-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  nala_gates_and_rust_bridge:
+    name: sHeriFF Gates, Patch-Queue & Rust Bridge (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15, windows-latest]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust stable toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Verify NALA Patch-Queue Roundtrip (Apply + Reverse)
+        shell: bash
+        run: |
+          if [[ "${{ github.ref_name }}" == "master" ]]; then
+            bash nala/scripts/nala_patch_queue.sh verify-roundtrip
+          else
+            bash nala/scripts/nala_patch_queue.sh status
+          fi
+
+      - name: Test & Build Pure Safe Rust Bridge (BS-06)
+        shell: bash
+        run: |
+          cargo test --manifest-path nala/rust/nala-bambu-bridge-rs/Cargo.toml
+          cargo build --release --manifest-path nala/rust/nala-bambu-bridge-rs/Cargo.toml
+
+      - name: Run sHeriFF Skin-Guard, 5-PDF & Zero-PII Self-Check
+        shell: bash
+        run: |
+          EXT=""
+          if [[ "$RUNNER_OS" == "Windows" ]]; then EXT=".exe"; fi
+          BIN="nala/rust/nala-bambu-bridge-rs/target/release/nala-bambu-bridge-rs${EXT}"
+          "$BIN" --verify-skins nala/skins
+          "$BIN" --build-pdfs nala/docs/pdf
+          "$BIN" --self-check nala
+          # Non-Empty Binary Gate (TheStandart Gate 6)
+          SIZE=$(wc -c < "$BIN")
+          echo "Binary size: ${SIZE} bytes"
+          test "$SIZE" -gt 100000
+
+      - name: Upload NALA Rust Bridge & 5-Language PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: nala-bridge-and-docs-${{ matrix.os }}
+          path: |
+            nala/rust/nala-bambu-bridge-rs/target/release/nala-bambu-bridge-rs*
+            nala/docs/pdf/*.pdf
+            nala/skins/skins_manifest.json
+
+  upstream_sync_and_rebase:
+    name: Auto-Sync Upstream bambulab/BambuStudio -> nala-optimized
+    needs: nala_gates_and_rust_bridge
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.sync_upstream)
+    runs-on: ubuntu-24.04
+    outputs:
+      upstream_version: ${{ steps.sync.outputs.upstream_version }}
+      synced: ${{ steps.sync.outputs.synced }}
+    steps:
+      - name: Checkout repository (full history for clean upstream merge)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: master
+
+      - name: Fetch bambulab/BambuStudio & Apply NALA Patch-Queue
+        id: sync
+        shell: bash
+        run: |
+          git config user.name "NALA Auto-Sync Bot"
+          git config user.email "nala-bot@users.noreply.github.com"
+          git remote add upstream https://github.com/bambulab/BambuStudio.git || true
+          git fetch upstream master --tags
+
+          UP_VER=$(git show upstream/master:version.inc | grep 'SLIC3R_VERSION' | head -n 1 | cut -d'"' -f2)
+          CUR_VER=$(grep 'SLIC3R_VERSION' version.inc | head -n 1 | cut -d'"' -f2)
+          echo "upstream_version=$UP_VER" >> "$GITHUB_OUTPUT"
+          echo "Current=$CUR_VER | Upstream=$UP_VER"
+
+          # Fast-forward/merge upstream cleanly into master (nala/ directory never conflicts!)
+          if ! git merge --no-edit upstream/master; then
+            echo "::error::Upstream merge into master had conflict — aborting cleanly (NCSP rollback)."
+            git merge --abort || true
+            exit 1
+          fi
+
+          # Rebuild nala-optimized branch from updated master + apply NALA patch queue
+          git checkout -B nala-optimized master
+          if ! bash nala/scripts/nala_patch_queue.sh apply; then
+            echo "::error::NALA patch queue conflict on upstream $UP_VER — preserving last working release!"
+            git reset --hard master
+            exit 2
+          fi
+
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(nala): auto-sync upstream BambuStudio ${UP_VER} + apply NALA Phase 1 patches"
+          fi
+          git push origin master
+          git push --force-with-lease origin nala-optimized
+          echo "synced=true" >> "$GITHUB_OUTPUT"
+
+  build_multi_os_slicer:
+    name: Full Multi-OS NALA-BambuStudio Build
+    needs: upstream_sync_and_rebase
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.trigger_full_slicer_build)
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+          - os: macos-15
+            arch: arm64
+          - os: macos-15-intel
+            arch: x86_64
+          - os: windows-latest
+    uses: ./.github/workflows/build_check_cache.yml
+    with:
+      os: ${{ matrix.os }}
+      arch: ${{ matrix.arch }}
+      build-deps-only: false
+    secrets: inherit

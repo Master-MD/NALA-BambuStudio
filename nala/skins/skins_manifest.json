@@ -1,0 +1,10 @@
+{
+  "schema": "nala-sheriff-skin-manifest-v1",
+  "skins": [
+    {"id": "bambu-classic", "name": "Bambu Classic Emerald", "file": "bambu-classic.nala-skin.json", "canonical_sha256": "37a16ebf9e5deea700b5f32cde62bcf9c7c29769228cd86841672a62a85ec888", "accent": "#00AE42"},
+    {"id": "doom-uac", "name": "DOOM UAC Praetor HUD", "file": "doom-uac.nala-skin.json", "canonical_sha256": "bcc3a98fe01a385912b51202c358e678740e81ce9d2a33ab9963a1eba5c7da2b", "accent": "#EA580C"},
+    {"id": "matrix-construct", "name": "Matrix Nebuchadnezzar Construct", "file": "matrix-construct.nala-skin.json", "canonical_sha256": "d2a0e8fe7f9bfa94655774f02b2a06a578c2f901efceef4bbd9fff546fefe2f3", "accent": "#10B981"},
+    {"id": "nala-obsidian", "name": "NALA Obsidian Dark", "file": "nala-obsidian.nala-skin.json", "canonical_sha256": "327807c8afa685b21a3c15764f49210049f0d399a0a89269d6a0a051339224ef", "accent": "#10B981"},
+    {"id": "porsche-v4", "name": "Porsche Design System v4 Carbon", "file": "porsche-v4.nala-skin.json", "canonical_sha256": "c1bc52d748571998c39ca2c74f13487bc5e70c4c11909d04cb093ef29521cb24", "accent": "#D5001C"}
+  ]
+}

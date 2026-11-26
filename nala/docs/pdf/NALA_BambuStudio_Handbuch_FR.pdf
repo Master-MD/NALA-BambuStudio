@@ -1,0 +1,70 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Length 2528 >>
+stream
+0.04 0.06 0.09 rg 0 748 595 94 re f
+0.06 0.72 0.50 rg 0 744 595 4 re f
+BT /F2 18 Tf 1 1 1 rg 42 798 Td (NALA-BambuStudio - Manuel Utilisateur \(FR\)) Tj ET
+BT /F1 10 Tf 0.78 0.85 0.90 rg 42 772 Td (Turbo GPU Intel Ubuntu | 5 Skins sHeriFF | Mode Dual Confidentialite | Pont Filamentrix) Tj ET
+0.06 0.45 0.34 rg
+BT /F2 12 Tf 42 712 Td (1. Compatibilite 100% Imprimantes Bambu & Synchro Upstream \(BS-01\)) Tj ET
+0.12 0.14 0.18 rg
+BT /F1 9.5 Tf 50 696 Td (- Conserve integralement le moteur libslic3r officiel \(A1, P1, X1, H2D, H3C, AMS\).) Tj ET
+BT /F1 9.5 Tf 50 683 Td (- File de correctifs \(nala/patches/\) sans conflit lors des mises a jour bambulab/BambuStudio.) Tj ET
+BT /F1 9.5 Tf 50 670 Td (- Compilation automatique multi-OS: Ubuntu \(.deb/.AppImage\), macOS \(.dmg\), Windows \(.exe\).) Tj ET
+0.06 0.45 0.34 rg
+BT /F2 12 Tf 42 647 Td (2. Correctif Turbo GPU Intel Ubuntu & Demarrage Rapide \(BS-02\)) Tj ET
+0.12 0.14 0.18 rg
+BT /F1 9.5 Tf 50 631 Td (- Detection Intel Mesa automatique: active WEBKIT_DISABLE_DMABUF_RENDERER=1 avant wxEntry\(\).) Tj ET
+BT /F1 9.5 Tf 50 618 Td (- Plafonne MSAA a X4 et les textures a 4096px sur GPU Intel integre / Arc.) Tj ET
+BT /F1 9.5 Tf 50 605 Td (- Demarrage accelere \(-40% a -60%\) et jusqu'a +300% de fluidite 3D sur Ubuntu.) Tj ET
+0.06 0.45 0.34 rg
+BT /F2 12 Tf 42 582 Td (3. Moteur de Skins sHeriFF \(BS-03\)) Tj ET
+0.12 0.14 0.18 rg
+BT /F1 9.5 Tf 50 566 Td (- 5 skins scelles SHA-256: NALA Obsidian, Porsche v4, DOOM UAC, Matrix Construct, Bambu Classic.) Tj ET
+BT /F1 9.5 Tf 50 553 Td (- Selection via NALA_SKIN=<id> sans modifier les 299 couleurs codees en dur.) Tj ET
+0.06 0.45 0.34 rg
+BT /F2 12 Tf 42 530 Td (4. Garde Dual-Mode sHeriFF \(BS-04\)) Tj ET
+0.12 0.14 0.18 rg
+BT /F1 9.5 Tf 50 514 Td (- Mode A \(lan_only\): 100% reseau local sans telemetrie ni envoi Cloud OSS.) Tj ET
+BT /F1 9.5 Tf 50 501 Td (- Mode B \(compat\): Compatibilite complete Bambu Cloud & Bambu Connect avec controle SHA-256.) Tj ET
+0.06 0.45 0.34 rg
+BT /F2 12 Tf 42 478 Td (5. Pont Rust NALA Filamentrix & 5 Langues \(BS-05 / BS-06\)) Tj ET
+0.12 0.14 0.18 rg
+BT /F1 9.5 Tf 50 462 Td (- 5 langues incluses: DE, FR, IT, RM \(Rumantsch\), EN + guides PDF 100% hors ligne.) Tj ET
+BT /F1 9.5 Tf 50 449 Td (- Pont Rust securise \(nala-bambu-bridge-rs\) sur 127.0.0.1:18766 vers NALA Filamentrix \(:18765\).) Tj ET
+0.88 0.90 0.93 RG 0.5 w 42 44 m 553 44 l S
+BT /F1 8 Tf 0.42 0.46 0.52 rg 42 30 Td (NALA-BambuStudio Phase 1 v1.0 | TheStandart & NCSP v2.5 | AGPLv3 | 100% Offline PDF - 0% Tracking) Tj ET
+
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000257 00000 n 
+0000000354 00000 n 
+0000000456 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+3036
+%%EOF

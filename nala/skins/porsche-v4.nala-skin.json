@@ -1,0 +1,16 @@
+{
+  "id": "porsche-v4",
+  "name": "Porsche Design System v4 Carbon",
+  "author": "NALA-OS Design Factory",
+  "accent": "#D5001C",
+  "accent_pressed": "#A80016",
+  "accent_hovered": "#F21B37",
+  "bg_primary": "#0E0E12",
+  "bg_surface": "#17181E",
+  "bg_elevated": "#20222A",
+  "text_primary": "#F4F5F7",
+  "text_muted": "#9A9DA6",
+  "border": "#2B2E38",
+  "warning": "#F59E0B",
+  "danger": "#FF2E4C"
+}

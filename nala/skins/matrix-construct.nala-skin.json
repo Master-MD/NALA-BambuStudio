@@ -1,0 +1,16 @@
+{
+  "id": "matrix-construct",
+  "name": "Matrix Nebuchadnezzar Construct",
+  "author": "NALA-OS Design Factory",
+  "accent": "#10B981",
+  "accent_pressed": "#047857",
+  "accent_hovered": "#34D399",
+  "bg_primary": "#030806",
+  "bg_surface": "#07130E",
+  "bg_elevated": "#0B1D15",
+  "text_primary": "#D1FAE5",
+  "text_muted": "#6EE7B7",
+  "border": "#123828",
+  "warning": "#FBBF24",
+  "danger": "#F87171"
+}

@@ -1,0 +1,69 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Length 2343 >>
+stream
+0.04 0.06 0.09 rg 0 748 595 94 re f
+0.06 0.72 0.50 rg 0 744 595 4 re f
+BT /F2 18 Tf 1 1 1 rg 42 798 Td (NALA-BambuStudio - Manual d'Utilisader \(RM\)) Tj ET
+BT /F1 10 Tf 0.78 0.85 0.90 rg 42 772 Td (Turbo GPU Intel Ubuntu | 5 Skins sHeriFF | Protecziun Dual-Mode | Punt Filamentrix) Tj ET
+0.06 0.45 0.34 rg
+BT /F2 12 Tf 42 712 Td (1. Cumpatibilitad 100% cun tut ils Stampaders Bambu \(BS-01\)) Tj ET
+0.12 0.14 0.18 rg
+BT /F1 9.5 Tf 50 696 Td (- Mantegna il motor uffizial libslic3r per tut ils stampaders \(A1, P1, X1, H2D, H3C, AMS\).) Tj ET
+BT /F1 9.5 Tf 50 683 Td (- Actualisaziun automatica tar mintga nova versiun da bambulab/BambuStudio.) Tj ET
+BT /F1 9.5 Tf 50 670 Td (- Compilaziun automatica per Ubuntu \(.deb/.AppImage\), macOS \(.dmg\) e Windows \(.exe\).) Tj ET
+0.06 0.45 0.34 rg
+BT /F2 12 Tf 42 647 Td (2. Optimaziun Ubuntu GPU Intel & Aviar Svelt \(BS-02\)) Tj ET
+0.12 0.14 0.18 rg
+BT /F1 9.5 Tf 50 631 Td (- Riconuschientscha automatica dad Intel Mesa: activa WEBKIT_DISABLE_DMABUF_RENDERER=1.) Tj ET
+BT /F1 9.5 Tf 50 618 Td (- Limitescha MSAA sin X4 e texturas sin 4096px -> nagin stuttering sin Ubuntu.) Tj ET
+0.06 0.45 0.34 rg
+BT /F2 12 Tf 42 595 Td (3. Engine da Skins sHeriFF cun 5 Skins \(BS-03\)) Tj ET
+0.12 0.14 0.18 rg
+BT /F1 9.5 Tf 50 579 Td (- 5 skins sigillads cun SHA-256: NALA Obsidian, Porsche v4, DOOM UAC, Matrix, Bambu Classic.) Tj ET
+BT /F1 9.5 Tf 50 566 Td (- Tscherna simpla via NALA_SKIN=<id> senza conflicts da merge.) Tj ET
+0.06 0.45 0.34 rg
+BT /F2 12 Tf 42 543 Td (4. Segirezza Dual-Mode sHeriFF \(BS-04\)) Tj ET
+0.12 0.14 0.18 rg
+BT /F1 9.5 Tf 50 527 Td (- Mode A \(lan_only\): 100% local en il LAN senza telemetria e senza Cloud OSS.) Tj ET
+BT /F1 9.5 Tf 50 514 Td (- Mode B \(compat\): Cumpatibilitad cumpletta cun Bambu Cloud & Bambu Connect.) Tj ET
+0.06 0.45 0.34 rg
+BT /F2 12 Tf 42 491 Td (5. Punt Rust NALA Filamentrix & 5 Linguas \(BS-05 / BS-06\)) Tj ET
+0.12 0.14 0.18 rg
+BT /F1 9.5 Tf 50 475 Td (- Rumantsch \(rm\) integr\340 sper DE, FR, IT ed EN + manuals PDF 100% offline.) Tj ET
+BT /F1 9.5 Tf 50 462 Td (- Punt Rust \(nala-bambu-bridge-rs\) sin 127.0.0.1:18766 per NALA Filamentrix \(:18765\).) Tj ET
+0.88 0.90 0.93 RG 0.5 w 42 44 m 553 44 l S
+BT /F1 8 Tf 0.42 0.46 0.52 rg 42 30 Td (NALA-BambuStudio Phase 1 v1.0 | TheStandart & NCSP v2.5 | AGPLv3 | 100% Offline PDF - 0% Tracking) Tj ET
+
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000257 00000 n 
+0000000354 00000 n 
+0000000456 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+2851
+%%EOF
