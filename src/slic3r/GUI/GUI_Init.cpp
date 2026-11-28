@@ -21,12 +21,64 @@
 #ifndef _WIN32
     #include <signal.h>
 #endif
+#ifdef __linux__
+    #include <cstdlib>
+    #include <cstring>
+    #include <filesystem>
+    #include <fstream>
+    #include <string>
+#endif
 
 namespace Slic3r {
 namespace GUI {
 
+#ifdef __linux__
+// NALA-TURBO (BS-02): Runtime Intel iGPU/Arc (Mesa) & Wayland WebKitGTK DMA-BUF Guard.
+// Prevents white-screens, EGL compositor deadlocks, and UI stutter on Ubuntu 22.04/24.04/26.04
+// without overriding explicit user environment variables (setenv overwrite = 0).
+static void nala_apply_linux_intel_gpu_guards()
+{
+    bool intel_gpu_detected = false;
+    std::error_code ec;
+    const std::filesystem::path drm_root("/sys/class/drm");
+    if (std::filesystem::exists(drm_root, ec)) {
+        for (const auto &entry : std::filesystem::directory_iterator(drm_root, ec)) {
+            const std::filesystem::path vendor_file = entry.path() / "device" / "vendor";
+            std::ifstream ifs(vendor_file);
+            std::string vendor_id;
+            if (ifs && std::getline(ifs, vendor_id)) {
+                if (vendor_id.find("0x8086") != std::string::npos) {
+                    intel_gpu_detected = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    const char *keep_dmabuf   = std::getenv("NALA_KEEP_WEBKIT_DMABUF");
+    const char *force_safe    = std::getenv("NALA_FORCE_SAFE_WEBKIT");
+    const char *wayland_disp  = std::getenv("WAYLAND_DISPLAY");
+    const char *force_wayland = std::getenv("NALA_FORCE_WAYLAND");
+    const bool keep_dmabuf_on = (keep_dmabuf && std::strcmp(keep_dmabuf, "1") == 0);
+    const bool force_safe_on  = (force_safe && std::strcmp(force_safe, "1") == 0);
+
+    if (!keep_dmabuf_on && (intel_gpu_detected || force_safe_on || wayland_disp != nullptr)) {
+        ::setenv("WEBKIT_DISABLE_DMABUF_RENDERER", "1", 0);
+        if (intel_gpu_detected || force_safe_on)
+            ::setenv("WEBKIT_DISABLE_COMPOSITING_MODE", "1", 0);
+        ::setenv("MESA_SHADER_CACHE_MAX_SIZE", "512M", 0);
+        if (wayland_disp != nullptr && !(force_wayland && std::strcmp(force_wayland, "1") == 0))
+            ::setenv("GDK_BACKEND", "x11", 0);
+    }
+    perf_mark("startup.nala_intel_guard_applied");
+}
+#endif
+
 int GUI_Run(GUI_InitParams &params)
 {
+#ifdef __linux__
+    nala_apply_linux_intel_gpu_guards();
+#endif
 #if __APPLE__
     // On OSX, we use boost::process::spawn() to launch new instances of PrusaSlicer from another PrusaSlicer.
     // boost::process::spawn() sets SIGCHLD to SIGIGN for the child process, thus if a child PrusaSlicer spawns another

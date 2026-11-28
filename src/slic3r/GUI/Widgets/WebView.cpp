@@ -7,6 +7,7 @@
 #include "slic3r/Utils/MacDarkMode.hpp"
 
 #include <chrono>
+#include <cstdlib>
 #include <deque>
 #include <memory>
 
@@ -1234,6 +1235,32 @@ static void apply_devtools(wxWebView *webView, bool enable)
 #endif
 }
 
+static const char* nala_webview_skin_user_script()
+{
+    const char* raw_skin = std::getenv("NALA_SKIN");
+    const std::string skin = (raw_skin && *raw_skin) ? std::string(raw_skin) : std::string("nala-obsidian");
+    if (skin == "bambu-classic")
+        return nullptr;
+    if (skin == "porsche-v4") {
+        return "(function(){var s=document.getElementById('nala-skin-tokens')||document.createElement('style');"
+               "s.id='nala-skin-tokens';s.textContent=':root{--nala-accent:#D5001C;--brand-green:#D5001C;--primary-color:#D5001C;--nala-bg:#0E0E12;--nala-surface:#17181E;}';"
+               "(document.head||document.documentElement).appendChild(s);})();";
+    }
+    if (skin == "doom-uac") {
+        return "(function(){var s=document.getElementById('nala-skin-tokens')||document.createElement('style');"
+               "s.id='nala-skin-tokens';s.textContent=':root{--nala-accent:#EA580C;--brand-green:#EA580C;--primary-color:#EA580C;--nala-bg:#0C0A09;--nala-surface:#181311;}';"
+               "(document.head||document.documentElement).appendChild(s);})();";
+    }
+    if (skin == "matrix-construct") {
+        return "(function(){var s=document.getElementById('nala-skin-tokens')||document.createElement('style');"
+               "s.id='nala-skin-tokens';s.textContent=':root{--nala-accent:#10B981;--brand-green:#10B981;--primary-color:#10B981;--nala-bg:#030806;--nala-surface:#07130E;}';"
+               "(document.head||document.documentElement).appendChild(s);})();";
+    }
+    return "(function(){var s=document.getElementById('nala-skin-tokens')||document.createElement('style');"
+           "s.id='nala-skin-tokens';s.textContent=':root{--nala-accent:#10B981;--brand-green:#10B981;--primary-color:#10B981;--nala-bg:#080A0F;--nala-surface:#11151E;}';"
+           "(document.head||document.documentElement).appendChild(s);})();";
+}
+
 wxWebView *WebView::CreateWebView(wxWindow *parent, wxString const &url, wxString const &name,
                                  Slic3r::GUI::WebViewProtectionMode mode)
 {
@@ -1353,6 +1380,9 @@ wxWebView *WebView::CreateWebView(wxWindow *parent, wxString const &url, wxStrin
     if (!name.empty())
         webView->SetName(name);
     if (has_backend_attempt) {
+        if (const char* nala_skin_js = nala_webview_skin_user_script()) {
+            webView->AddUserScript(wxString::FromUTF8(nala_skin_js), wxWEBVIEW_INJECT_AT_DOCUMENT_START);
+        }
         auto addScriptMessageHandler = [] (wxWebView *webView) {
             Slic3r::GUI::wxGetApp().set_adding_script_handler(true);
 

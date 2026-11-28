@@ -1,7 +1,28 @@
 #include "StateColor.hpp"
 #include <wx/gdicmn.h>
+#include <cstdlib>
+#include <fstream>
+#include <string>
 
 static bool gDarkMode = false;
+static std::string gAppliedNalaSkin;
+
+static std::string nala_resolve_active_skin()
+{
+    if (const char* env_skin = std::getenv("NALA_SKIN"); env_skin && *env_skin)
+        return std::string(env_skin);
+    if (const char* home = std::getenv("HOME"); home && *home) {
+        std::ifstream ifs(std::string(home) + "/.config/NALA-BambuStudio/active_skin");
+        std::string line;
+        if (ifs && std::getline(ifs, line)) {
+            while (!line.empty() && (line.back() == '\r' || line.back() == '\n' || line.back() == ' '))
+                line.pop_back();
+            if (!line.empty())
+                return line;
+        }
+    }
+    return "nala-obsidian";
+}
 
 static bool operator<(wxColour const &l, wxColour const &r) { return l.GetRGBA() < r.GetRGBA(); }
 
@@ -58,12 +79,77 @@ std::map<wxColour, wxColour> const & StateColor::GetDarkMap()
     return gDarkColors;
 }
 
-void StateColor::SetDarkMode(bool dark) { gDarkMode = dark; }
+static void nala_apply_skin_palette()
+{
+    const std::string skin = nala_resolve_active_skin();
+    if (skin == gAppliedNalaSkin)
+        return;
+    gAppliedNalaSkin = skin;
+
+    if (skin == "bambu-classic") {
+        gDarkColors[ThemeColor::BrandGreen]        = wxColour("#21A452");
+        gDarkColors[ThemeColor::BrandGreenPressed] = wxColour("#1C8A46");
+        gDarkColors[ThemeColor::BrandGreenHovered] = wxColour("#37B865");
+        gDarkColors[ThemeColor::White]             = wxColour("#2D2D31");
+        gDarkColors[ThemeColor::Grey200]           = wxColour("#36363C");
+        gDarkColors[ThemeColor::Grey250]           = wxColour("#36363B");
+        return;
+    }
+
+    if (skin == "porsche-v4") {
+        gDarkColors[ThemeColor::BrandGreen]        = wxColour("#D5001C");
+        gDarkColors[ThemeColor::BrandGreenPressed] = wxColour("#A80016");
+        gDarkColors[ThemeColor::BrandGreenHovered] = wxColour("#F21B37");
+        gDarkColors[ThemeColor::White]             = wxColour("#17181E");
+        gDarkColors[ThemeColor::Grey200]           = wxColour("#20222A");
+        gDarkColors[ThemeColor::Grey250]           = wxColour("#0E0E12");
+        gDarkColors[ThemeColor::LightGreen]        = wxColour("#2A1519");
+        return;
+    }
+
+    if (skin == "doom-uac") {
+        gDarkColors[ThemeColor::BrandGreen]        = wxColour("#EA580C");
+        gDarkColors[ThemeColor::BrandGreenPressed] = wxColour("#C2410C");
+        gDarkColors[ThemeColor::BrandGreenHovered] = wxColour("#F97316");
+        gDarkColors[ThemeColor::White]             = wxColour("#181311");
+        gDarkColors[ThemeColor::Grey200]           = wxColour("#231B18");
+        gDarkColors[ThemeColor::Grey250]           = wxColour("#0C0A09");
+        gDarkColors[ThemeColor::LightGreen]        = wxColour("#2B1910");
+        return;
+    }
+
+    if (skin == "matrix-construct") {
+        gDarkColors[ThemeColor::BrandGreen]        = wxColour("#10B981");
+        gDarkColors[ThemeColor::BrandGreenPressed] = wxColour("#047857");
+        gDarkColors[ThemeColor::BrandGreenHovered] = wxColour("#34D399");
+        gDarkColors[ThemeColor::White]             = wxColour("#07130E");
+        gDarkColors[ThemeColor::Grey200]           = wxColour("#0B1D15");
+        gDarkColors[ThemeColor::Grey250]           = wxColour("#030806");
+        gDarkColors[ThemeColor::LightGreen]        = wxColour("#0A261A");
+        return;
+    }
+
+    // Default: nala-obsidian
+    gDarkColors[ThemeColor::BrandGreen]        = wxColour("#10B981");
+    gDarkColors[ThemeColor::BrandGreenPressed] = wxColour("#059669");
+    gDarkColors[ThemeColor::BrandGreenHovered] = wxColour("#34D399");
+    gDarkColors[ThemeColor::White]             = wxColour("#11151E");
+    gDarkColors[ThemeColor::Grey200]           = wxColour("#171C28");
+    gDarkColors[ThemeColor::Grey250]           = wxColour("#080A0F");
+    gDarkColors[ThemeColor::LightGreen]        = wxColour("#0F241D");
+}
+
+void StateColor::SetDarkMode(bool dark) {
+    gDarkMode = dark;
+    nala_apply_skin_palette();
+}
 
 inline wxColour darkModeColorFor2(wxColour const &color)
 {
     if (!gDarkMode)
         return color;
+    if (gAppliedNalaSkin.empty())
+        nala_apply_skin_palette();
     auto iter = gDarkColors.find(color);
     if (iter != gDarkColors.end()) return iter->second;
     return color;

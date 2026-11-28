@@ -351,6 +351,11 @@ wxBoxSizer *PreferencesDialog::create_item_language_combobox(
         else if (vlist[i] == wxLocale::GetLanguageInfo(wxLANGUAGE_GERMAN)) {
             language_name = wxString::FromUTF8("Deutsch");
         }
+#ifdef wxLANGUAGE_RHAETO_ROMANCE
+        else if (vlist[i] == wxLocale::GetLanguageInfo(wxLANGUAGE_RHAETO_ROMANCE)) {
+            language_name = wxString::FromUTF8("Rumantsch (CH)");
+        }
+#endif
         else if (vlist[i] == wxLocale::GetLanguageInfo(wxLANGUAGE_SWEDISH)) {
             language_name = wxString::FromUTF8("\x53\x76\x65\x6e\x73\x6b\x61"); //Svenska
         }

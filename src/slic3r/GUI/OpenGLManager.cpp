@@ -10,6 +10,10 @@
 
 #include <GL/glew.h>
 
+#include <algorithm>
+#include <cctype>
+#include <cstdlib>
+
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
 
@@ -173,6 +177,31 @@ const std::string& OpenGLManager::GLInfo::get_renderer() const
     return m_renderer;
 }
 
+static bool nala_is_intel_integrated_gpu(const std::string& vendor, const std::string& renderer)
+{
+    auto lower_str = [](std::string s) {
+        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+        return s;
+    };
+    const std::string v = lower_str(vendor);
+    const std::string r = lower_str(renderer);
+    return (v.find("intel") != std::string::npos)
+        || (r.find("intel") != std::string::npos)
+        || (r.find("iris") != std::string::npos)
+        || (r.find("uhd graphics") != std::string::npos)
+        || (r.find("hd graphics") != std::string::npos);
+}
+
+static int nala_env_int_or(const char* name, int fallback, int min_v, int max_v)
+{
+    if (const char* raw = std::getenv(name); raw && *raw) {
+        const int parsed = std::atoi(raw);
+        if (parsed >= min_v && parsed <= max_v)
+            return parsed;
+    }
+    return fallback;
+}
+
 int OpenGLManager::GLInfo::get_max_tex_size() const
 {
     if (!m_detected)
@@ -183,6 +212,10 @@ int OpenGLManager::GLInfo::get_max_tex_size() const
     // and use smaller texture for non retina systems
     return (Slic3r::GUI::mac_max_scaling_factor() > 1.0) ? std::min(m_max_tex_size, 8192) : std::min(m_max_tex_size / 2, 4096);
 #else
+    if (nala_is_intel_integrated_gpu(m_vendor, m_renderer)) {
+        const int intel_cap = nala_env_int_or("NALA_GL_MAX_TEX", 4096, 1024, 8192);
+        return std::min(m_max_tex_size, intel_cap);
+    }
     // and use smaller texture for older OpenGL versions
     return is_version_greater_or_equal_to(3, 0) ? std::min(m_max_tex_size, 8192) : std::min(m_max_tex_size / 2, 4096);
 #endif // __APPLE__
@@ -223,6 +256,15 @@ void OpenGLManager::GLInfo::detect() const
     }
     int max_offscreen_msaa = 0;
     glsafe(::glGetIntegerv(GL_MAX_SAMPLES, &max_offscreen_msaa));
+    if (nala_is_intel_integrated_gpu(m_vendor, m_renderer)) {
+        const int intel_msaa_cap = nala_env_int_or("NALA_GL_MAX_MSAA", 4, 0, 16);
+        if (max_offscreen_msaa > intel_msaa_cap) {
+            BOOST_LOG_TRIVIAL(info) << "[NALA-TURBO] Intel GPU detected (" << m_renderer
+                                    << "): capping offscreen MSAA from " << max_offscreen_msaa
+                                    << " to " << intel_msaa_cap << " for smooth viewport FPS";
+            max_offscreen_msaa = intel_msaa_cap;
+        }
+    }
     const_cast<OpenGLManager::GLInfo*>(this)->m_max_offscreen_msaa = max_offscreen_msaa;
 
     *const_cast<bool*>(&m_detected) = true;

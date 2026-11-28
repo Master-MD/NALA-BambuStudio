@@ -8890,6 +8890,7 @@ wxString GUI_App::current_language_code_safe() const
 		{ "cs", 	"cs_CZ", },
 		{ "sk", 	"cs_CZ", },
 		{ "de", 	"de_DE", },
+		{ "rm", 	"rm_CH", },
 		{ "nl", 	"nl_NL", },
 		{ "sv", 	"sv_SE", },
 		{ "es", 	"es_ES", },
